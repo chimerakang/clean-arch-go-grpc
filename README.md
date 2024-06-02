@@ -3,9 +3,7 @@ This is example of implementation clean architecure in golang and gRPC.
 
 ## Installation
 ```bash
-cd ./cmd/server
-
-go get .
+make all
 ```
 
 ## Set the config
@@ -22,8 +20,8 @@ Open config.json Change to your own database, port, log, app config
     "level": 6
   },
   "database": {
-    "username": "postgres",
-    "password": "postgres123",
+    "username": "product",
+    "password": "mysql123",
     "host": "localhost",
     "port": "5432",
     "name": "product-db",
@@ -38,7 +36,7 @@ Open config.json Change to your own database, port, log, app config
 
 ## Usage
 ```bash
-go run cmd/server/main.go
+make run
 ```
 
 ## Contributing

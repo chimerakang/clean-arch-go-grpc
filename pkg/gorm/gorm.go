@@ -6,7 +6,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -18,19 +18,34 @@ func NewDatabase(
 	username := viper.GetString("database.username")
 	password := viper.GetString("database.password")
 	host := viper.GetString("database.host")
-	port := viper.GetString("database.port")
+	port := viper.GetInt("database.port")
 	database := viper.GetString("database.name")
+	query := viper.GetString("database.query")
+	charset := viper.GetString("database.charset")
+	collation := viper.GetString("database.collation")
 	idleConnection := viper.GetInt("database.pool.idle")
 	maxConnection := viper.GetInt("database.pool.max")
 	maxLifeTimeConnection := viper.GetInt("database.pool.lifetime")
 
 	// init connection mysql
 	// dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", username, password, host, port, database)
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, username, password, database, port)
+	// dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, username, password, database, port)
+
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:%d)/%s?%s&charset=%s&collation=%s",
+		username,
+		password,
+		host,
+		port,
+		database,
+		query,
+		charset,
+		collation,
+	)
 
 	log.Printf("connecting to db %s", dsn)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: logger.New(&logrusWriter{Logger: log}, logger.Config{
 			SlowThreshold:             time.Second * 5,
 			Colorful:                  false,

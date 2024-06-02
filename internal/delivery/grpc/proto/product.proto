@@ -1,13 +1,32 @@
 syntax="proto3";
 package product_grpc;
-option go_package = "clean-arch-go-grpc/internal/delivery/grpc/proto/product_grpc";
+option go_package = "./internal/delivery/product_pb";
+
+import "google/api/annotations.proto";
+import "google/protobuf/descriptor.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Syp gateway api";
+    version: "1.0.0";
+  };
+  schemes: HTTPS;
+  schemes: HTTP;
+};
+
 
 service ProductHandler {
   rpc GetList(Empty) returns (Products) {};
   rpc Get(GetRequest) returns (Product) {};
   rpc GetStream(Empty) returns (stream Product) {};
   rpc BatchCreate(stream Product) returns (BatchCreateResponse) {}; 
-  rpc Create (Product) returns (Product) {};
+  rpc Create (Product) returns (Product) {
+    option(google.api.http) = {
+      post:"/v1/syp/product/create"
+      body:"*"
+    };
+  };
 }
 
 message ErrorMessage {

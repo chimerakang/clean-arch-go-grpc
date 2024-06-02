@@ -1,0 +1,140 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Syp gateway api",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "ProductHandler"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/syp/product/create": {
+      "post": {
+        "operationId": "ProductHandler_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/product_grpcProduct"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/product_grpcProduct"
+            }
+          }
+        ],
+        "tags": [
+          "ProductHandler"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "product_grpcBatchCreateResponse": {
+      "type": "object",
+      "properties": {
+        "TotalSuccess": {
+          "type": "string",
+          "format": "int64"
+        },
+        "Errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/product_grpcErrorMessage"
+          }
+        }
+      }
+    },
+    "product_grpcErrorMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "product_grpcProduct": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Price": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "product_grpcProducts": {
+      "type": "object",
+      "properties": {
+        "Products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/product_grpcProduct"
+          }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
